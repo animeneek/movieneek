@@ -1,1 +1,58 @@
+<header class="w-full absolute top-0 left-0 z-50">
+  <div class="flex items-center justify-between px-6 md:px-12 py-4">
 
+    <!-- Logo -->
+    <div class="text-white text-2xl font-bold tracking-wide">
+      Film<span class="text-red-500">Zone</span>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="hidden md:flex items-center gap-8 text-white text-sm">
+      <a href="index.html" class="hover:text-red-500 transition">Home</a>
+      <a href="#" class="hover:text-red-500 transition">Movies</a>
+      <a href="#" class="hover:text-red-500 transition">TV Shows</a>
+      <a href="#" class="hover:text-red-500 transition">My List</a>
+    </nav>
+
+    <!-- Right Section -->
+    <div class="flex items-center gap-4">
+
+      <!-- Search -->
+      <div class="hidden md:flex items-center bg-white/10 backdrop-blur-md px-3 py-1 rounded-full">
+        <input 
+          type="text" 
+          placeholder="Search..." 
+          class="bg-transparent outline-none text-white text-sm placeholder-gray-300 w-32"
+        />
+      </div>
+
+      <!-- Profile -->
+      <div class="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center text-white text-sm font-semibold">
+        U
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="menuBtn" class="md:hidden text-white text-xl">
+        ☰
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="hidden flex-col bg-black/90 text-white px-6 py-4 space-y-4 md:hidden">
+    <a href="index.html">Home</a>
+    <a href="#">Movies</a>
+    <a href="#">TV Shows</a>
+    <a href="#">My List</a>
+  </div>
+</header>
+
+<script>
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  menuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');
+  });
+</script>
