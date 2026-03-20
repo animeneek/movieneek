@@ -24,8 +24,8 @@
     const params = new URLSearchParams(window.location.search);
     const id = params.get("id");
 
-    const player = document.getElementById("player");
-    player.src = `https://player.embed-api.stream/?id=${id}`;
+    document.getElementById("player").src =
+      `https://player.embed-api.stream/?id=${id}`;
   </script>
 
 </body>
