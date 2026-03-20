@@ -1,4 +1,4 @@
-const API_TOKEN = "YOUR_TMDB_READ_ACCESS_TOKEN"; // paste your token here
+const API_TOKEN = "e3afd4c89e3351edad9e875ff7a01f0c"; // paste your token here
 const IMG_BASE = "https://image.tmdb.org/t/p/original";
 const FALLBACK = "assets/images/prabhas_01.jpg";
 
