@@ -1,6 +1,6 @@
-const API_TOKEN = "e3afd4c89e3351edad9e875ff7a01f0c"; // paste your token here
+const API_TOKEN = "e3afd4c89e3351edad9e875ff7a01f0c";
 const IMG_BASE = "https://image.tmdb.org/t/p/original";
-const FALLBACK = "assets/images/prabhas_01.jpg";
+const FALLBACK = "assets/images/Prabhas_01.jpg";
 
 // Fetch trending movies
 async function getTrending() {
@@ -9,10 +9,11 @@ async function getTrending() {
       Authorization: `Bearer ${API_TOKEN}`
     }
   });
+
   return res.json();
 }
 
-// Set hero section
+// Hero section
 function setHero(movie) {
   const hero = document.getElementById("hero");
   const title = document.getElementById("hero-title");
@@ -24,13 +25,14 @@ function setHero(movie) {
     : FALLBACK;
 
   hero.style.backgroundImage = `url('${bg}')`;
-  title.textContent = movie.title;
-  overview.textContent = movie.overview;
+
+  title.textContent = movie.title || movie.name;
+  overview.textContent = movie.overview || "No description available.";
 
   watchBtn.href = `movie.html?id=${movie.id}`;
 }
 
-// Create movie cards
+// Movie cards
 function createCard(movie) {
   const img = movie.poster_path
     ? `${IMG_BASE}${movie.poster_path}`
@@ -39,23 +41,32 @@ function createCard(movie) {
   return `
     <a href="movie.html?id=${movie.id}" class="min-w-[150px]">
       <img src="${img}" class="rounded-lg hover:scale-105 transition">
-      <p class="mt-2 text-sm">${movie.title}</p>
+      <p class="mt-2 text-sm">${movie.title || movie.name}</p>
     </a>
   `;
 }
 
-// Load page
+// Init
 async function init() {
-  const data = await getTrending();
+  try {
+    const data = await getTrending();
 
-  if (!data.results) return;
+    if (!data.results) {
+      console.error("No results from TMDB");
+      return;
+    }
 
-  setHero(data.results[0]);
+    setHero(data.results[0]);
 
-  const row = document.getElementById("movie-row");
-  data.results.forEach(movie => {
-    row.innerHTML += createCard(movie);
-  });
+    const row = document.getElementById("movie-row");
+
+    data.results.forEach(movie => {
+      row.innerHTML += createCard(movie);
+    });
+
+  } catch (err) {
+    console.error("Error loading movies:", err);
+  }
 }
 
 init();
