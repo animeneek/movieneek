@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Watch Series</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-black text-white">
+
+  <div id="header-container"></div>
+
+  <div class="p-6">
+    <iframe id="player"
+      class="w-full h-[80vh]"
+      frameborder="0"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <script src="assets/js/header.js"></script>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    // Default S01E01
+    document.getElementById("player").src =
+      `https://player.embed-api.stream/?id=${id}&s=1&e=1`;
+  </script>
+
+</body>
+</html>
