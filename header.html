@@ -6,6 +6,13 @@
       Movie<span class="text-red-500">Neek</span>
     </div>
 
+    <!-- Navigation -->
+    <nav class="hidden md:flex gap-6 text-sm">
+      <a href="#" class="hover:text-red-500 transition">Discover</a>
+      <a href="#" class="hover:text-red-500 transition">Trending</a>
+      <a href="#" class="hover:text-red-500 transition">New Releases</a>
+    </nav>
+
     <!-- Right -->
     <div class="flex items-center gap-4">
 
@@ -27,7 +34,11 @@
   </div>
 
   <!-- Mobile Menu -->
-  <div id="mobileMenu" class="hidden bg-black/95 px-6 py-4">
+  <div id="mobileMenu" class="hidden bg-black/95 px-6 py-4 space-y-4 md:hidden">
+    <a href="#">Discover</a>
+    <a href="#">Trending</a>
+    <a href="#">New Releases</a>
+
     <input 
       type="text"
       placeholder="Search..."
