@@ -2,24 +2,24 @@
   <div class="flex items-center justify-between px-6 md:px-12 py-4">
 
     <!-- Logo -->
-    <div class="text-white text-2xl font-bold tracking-wide">
+    <div class="text-white text-2xl font-bold">
       Movie<span class="text-red-500">Neek</span>
     </div>
 
-    <!-- Right Section -->
+    <!-- Right -->
     <div class="flex items-center gap-4">
 
-      <!-- Search -->
-      <div class="hidden md:flex items-center bg-white/10 backdrop-blur-md px-3 py-1 rounded-full">
+      <!-- Desktop Search -->
+      <div class="hidden md:flex bg-white/10 px-3 py-1 rounded-full">
         <input 
           type="text" 
-          placeholder="Search movies..." 
-          class="bg-transparent outline-none text-white text-sm placeholder-gray-300 w-40"
+          placeholder="Search..."
+          class="bg-transparent outline-none text-white text-sm"
         />
       </div>
 
-      <!-- Mobile Menu Button -->
-      <button id="menuBtn" class="md:hidden text-white text-2xl">
+      <!-- Mobile Button -->
+      <button id="menuBtn" class="md:hidden text-2xl">
         ☰
       </button>
 
@@ -27,14 +27,11 @@
   </div>
 
   <!-- Mobile Menu -->
-  <div id="mobileMenu" class="hidden flex-col bg-black/95 text-white px-6 py-4 space-y-4 md:hidden">
-    
-    <!-- Mobile Search -->
+  <div id="mobileMenu" class="hidden bg-black/95 px-6 py-4">
     <input 
-      type="text" 
-      placeholder="Search movies..." 
+      type="text"
+      placeholder="Search..."
       class="w-full bg-white/10 px-3 py-2 rounded outline-none"
     />
-
   </div>
 </header>
