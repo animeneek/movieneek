@@ -26,24 +26,27 @@
 
       <p id="overview" class="text-gray-400"></p>
 
-      <button onclick="openPlayer()"
-        class="border border-white px-6 py-2 rounded-lg hover:bg-white hover:text-black transition">
-        Play
-      </button>
+    </div>
+  </section>
 
+  <!-- EMBED PLAYER -->
+  <section class="px-6 md:px-20 pb-10">
+    <h2 class="text-sm text-gray-400 mb-4 text-center">Watch</h2>
+    <div class="w-full max-w-4xl mx-auto bg-white/10 border border-white/30 rounded-lg overflow-hidden backdrop-blur-md shadow-lg">
+      <iframe id="playerFrame" class="w-full aspect-video rounded-lg" frameborder="0" allowfullscreen></iframe>
     </div>
   </section>
 
   <!-- CAST -->
   <section class="px-6 md:px-20 pb-10">
-    <h2 class="text-sm text-gray-400 mb-4">Cast</h2>
-    <div id="cast" class="flex gap-4 overflow-x-auto no-scrollbar"></div>
+    <h2 class="text-sm text-gray-400 mb-4 text-center">Cast</h2>
+    <div id="cast" class="flex flex-col gap-3 items-center"></div>
   </section>
 
   <!-- CREW -->
   <section class="px-6 md:px-20 pb-10">
-    <h2 class="text-sm text-gray-400 mb-4">Crew</h2>
-    <div id="crew" class="text-sm text-gray-300 space-y-1"></div>
+    <h2 class="text-sm text-gray-400 mb-4 text-center">Crew</h2>
+    <div id="crew" class="flex flex-col gap-3 items-center"></div>
   </section>
 
   <!-- RECOMMEND -->
@@ -51,24 +54,6 @@
     <h2 class="text-sm text-gray-400 mb-4">Recommended</h2>
     <div id="recommend" class="flex gap-4 overflow-x-auto no-scrollbar"></div>
   </section>
-
-  <!-- PLAYER -->
-  <div id="playerModal"
-    class="fixed inset-0 bg-black/90 hidden items-center justify-center z-50">
-
-    <div class="w-full max-w-5xl aspect-video relative">
-      <iframe id="playerFrame"
-        class="w-full h-full rounded-lg"
-        frameborder="0"
-        allowfullscreen>
-      </iframe>
-
-      <button onclick="closePlayer()" class="absolute -top-10 right-0 text-sm">
-        Close
-      </button>
-    </div>
-
-  </div>
 
   <style>
     .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -84,25 +69,12 @@
     const id = new URLSearchParams(window.location.search).get("id");
 
     function getImage(path, type="bg") {
-      if (!path) return FALLBACK;
-      return (type === "bg" ? IMG : POSTER) + path;
-    }
-
-    function openPlayer() {
-      document.getElementById("playerModal").classList.remove("hidden");
-      document.getElementById("playerModal").classList.add("flex");
-      document.getElementById("playerFrame").src =
-        `https://player.embed-api.stream/?id=${id}`;
-    }
-
-    function closePlayer() {
-      document.getElementById("playerModal").classList.add("hidden");
-      document.getElementById("playerFrame").src = "";
+      return path ? (type === "bg" ? IMG : POSTER) + path : FALLBACK;
     }
 
     function createCard(item) {
       const link = document.createElement("a");
-      link.href = `/movie.html?id=${item.id}`;
+      link.href = `/movieneek/movie.html?id=${item.id}`;
       link.className = "min-w-[140px]";
 
       link.innerHTML = `
@@ -123,45 +95,53 @@
         fetch(`https://api.themoviedb.org/3/movie/${id}/recommendations?api_key=${API_KEY}`).then(r => r.json())
       ]);
 
+      // HERO
       document.getElementById("title").textContent = movie.title;
       document.getElementById("overview").textContent = movie.overview;
-
       const genres = movie.genres.map(g => g.name).slice(0,2).join(", ");
       document.getElementById("meta").textContent = `Movie / ${genres}`;
+      document.getElementById("bg").style.backgroundImage = `url(${getImage(movie.backdrop_path)})`;
 
-      document.getElementById("bg").style.backgroundImage =
-        `url(${getImage(movie.backdrop_path)})`;
+      // EMBED PLAYER
+      document.getElementById("playerFrame").src = `https://player.embed-api.stream/?id=${movie.id}`;
 
       // CAST
       const castContainer = document.getElementById("cast");
       credits.cast.slice(0,10).forEach(p => {
         const div = document.createElement("a");
-        div.href = `/person.html?id=${p.id}`;
-        div.className = "min-w-[100px] text-xs";
+        div.href = `/movieneek/person.html?id=${p.id}`;
+        div.className = "flex gap-3 items-center";
 
         div.innerHTML = `
-          <img src="${getImage(p.profile_path, "poster")}" 
-               class="w-full h-[140px] object-cover rounded-lg mb-1"/>
-          <p>${p.name}</p>
+          <img src="${getImage(p.profile_path, 'poster')}" class="w-12 h-12 rounded-full object-cover"/>
+          <div class="text-left">
+            <p class="text-sm">${p.character || ''}</p>
+            <p class="text-xs text-gray-400">${p.name}</p>
+          </div>
         `;
         castContainer.appendChild(div);
       });
 
       // CREW
-      const crew = credits.crew;
-      const director = crew.find(p => p.job === "Director");
-      const writer = crew.find(p => p.job === "Writer");
+      const crewContainer = document.getElementById("crew");
+      credits.crew.filter(p => ["Director","Writer"].includes(p.job)).forEach(p => {
+        const div = document.createElement("a");
+        div.href = `/movieneek/person.html?id=${p.id}`;
+        div.className = "flex gap-3 items-center";
 
-      document.getElementById("crew").innerHTML = `
-        <p>Director: ${director ? director.name : "N/A"}</p>
-        <p>Writer: ${writer ? writer.name : "N/A"}</p>
-      `;
+        div.innerHTML = `
+          <img src="${getImage(p.profile_path, 'poster')}" class="w-12 h-12 rounded-full object-cover"/>
+          <div class="text-left">
+            <p class="text-sm">${p.job}</p>
+            <p class="text-xs text-gray-400">${p.name}</p>
+          </div>
+        `;
+        crewContainer.appendChild(div);
+      });
 
       // RECOMMEND
       const recContainer = document.getElementById("recommend");
-      rec.results.slice(0,10).forEach(m => {
-        recContainer.appendChild(createCard(m));
-      });
+      rec.results.slice(0,10).forEach(m => recContainer.appendChild(createCard(m)));
     }
 
     loadMovie();
