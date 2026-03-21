@@ -11,33 +11,40 @@
 
   <!-- BACKGROUND -->
   <div class="fixed inset-0 -z-10">
-    <div id="bg" class="absolute inset-0 bg-cover bg-center"></div>
+    <div id="bg" class="absolute inset-0 bg-cover bg-center transition-all duration-700"></div>
     <div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
   </div>
 
   <!-- HERO -->
-  <section class="min-h-[70vh] flex flex-col justify-center px-6 md:px-20 pt-24 md:pt-28 space-y-5">
-    <div class="max-w-2xl space-y-3">
-      <h1 id="title" class="text-4xl md:text-6xl font-light leading-tight"></h1>
+  <section class="min-h-screen flex flex-col justify-center px-6 md:px-20 pt-20 md:pt-32 space-y-4">
+    <div class="max-w-2xl">
+      <h1 id="title" class="text-4xl md:text-6xl font-light"></h1>
       <p id="meta" class="text-sm text-gray-400"></p>
-      <p id="overview" class="text-gray-300 leading-relaxed"></p>
-      <p id="rating" class="text-gray-400"></p>
+      <p id="overview" class="text-gray-400 mt-2"></p>
+      <p id="rating" class="text-gray-300 mt-2"></p>
     </div>
   </section>
 
   <!-- EMBED PLAYER -->
-  <section class="px-4 md:px-20 pb-10">
-    <h2 class="text-sm text-gray-400 mb-3 text-center">Watch</h2>
+  <section class="px-6 md:px-20 pb-16">
+    <!-- softer label instead of loud "Watch" -->
+    <h2 class="text-xs text-gray-500 mb-3 text-center tracking-widest uppercase">Now Playing</h2>
 
-    <div class="w-full max-w-5xl mx-auto bg-white/10 border border-white/20 rounded-lg overflow-hidden backdrop-blur-md shadow-lg">
-      <div class="relative w-full aspect-video">
-        <iframe 
-          id="playerFrame"
-          class="absolute inset-0 w-full h-full"
-          frameborder="0"
-          allowfullscreen
-        ></iframe>
+    <div class="w-full max-w-5xl mx-auto rounded-xl overflow-hidden relative">
+
+      <!-- cinema glow -->
+      <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-60 pointer-events-none"></div>
+
+      <div class="relative w-full border border-white/10 rounded-xl overflow-hidden shadow-[0_0_60px_rgba(255,255,255,0.08)]">
+        <div class="relative w-full" style="padding-top:56.25%;">
+          <iframe id="playerFrame"
+            class="absolute top-0 left-0 w-full h-full"
+            frameborder="0"
+            allowfullscreen>
+          </iframe>
+        </div>
       </div>
+
     </div>
   </section>
 
@@ -74,12 +81,15 @@
     const API_KEY = "e3afd4c89e3351edad9e875ff7a01f0c";
     const IMG = "https://image.tmdb.org/t/p/original";
     const POSTER = "https://image.tmdb.org/t/p/w500";
-    const FALLBACK = "https://raw.githubusercontent.com/animeneek/movieneek/main/assets/images/BG_01.jpg";
+
+    // ✅ FIXED fallback (local path instead of broken GitHub blob)
+    const FALLBACK = "/assets/images/BG_01.jpg";
 
     const id = new URLSearchParams(window.location.search).get("id");
 
     function getImage(path, type="bg") {
-      return path ? (type === "bg" ? IMG : POSTER) + path : FALLBACK;
+      if (!path) return FALLBACK;
+      return (type === "bg" ? IMG : POSTER) + path;
     }
 
     function createCard(item) {
@@ -106,14 +116,24 @@
 
       // HERO
       document.getElementById("title").textContent = movie.title;
-      document.getElementById("overview").textContent = movie.overview || "No synopsis available.";
+      document.getElementById("overview").textContent = movie.overview;
+
       const genres = movie.genres.map(g => g.name).slice(0,2).join(", ");
       document.getElementById("meta").textContent = `Movie / ${genres}`;
-      document.getElementById("bg").style.backgroundImage = `url(${getImage(movie.backdrop_path)})`;
-      document.getElementById("rating").textContent = `Rating: ${movie.vote_average} / 10 (${movie.vote_count} votes)`;
+
+      // ✅ FIXED background (fallback if no backdrop)
+      const bgImage = movie.backdrop_path
+        ? IMG + movie.backdrop_path
+        : FALLBACK;
+
+      document.getElementById("bg").style.backgroundImage = `url(${bgImage})`;
+
+      document.getElementById("rating").textContent =
+        `Rating: ${movie.vote_average} / 10 (${movie.vote_count} votes)`;
 
       // EMBED PLAYER
-      document.getElementById("playerFrame").src = `https://player.embed-api.stream/?id=${movie.id}`;
+      document.getElementById("playerFrame").src =
+        `https://player.embed-api.stream/?id=${movie.id}`;
 
       // CAST
       const castContainer = document.getElementById("cast");
@@ -147,24 +167,16 @@
         crewContainer.appendChild(div);
       });
 
-      // REVIEWS (FIXED + BETTER)
+      // REVIEWS
       const reviewsContainer = document.getElementById("reviews");
-
-      if (!reviewsData.results.length) {
-        reviewsContainer.innerHTML = `<p class="text-gray-500 text-center">No reviews available.</p>`;
-      } else {
-        reviewsData.results.slice(0,5).forEach(r => {
-          const div = document.createElement("div");
-          div.className = "bg-white/10 p-4 rounded-md";
-
-          div.innerHTML = `
-            <p class="text-xs text-gray-400 mb-2">${r.author}</p>
-            <p class="text-sm leading-relaxed max-h-40 overflow-y-auto pr-2">
-              ${r.content}
-            </p>`;
-          reviewsContainer.appendChild(div);
-        });
-      }
+      reviewsData.results.slice(0,5).forEach(r => {
+        const div = document.createElement("div");
+        div.className = "bg-white/10 p-3 rounded-md";
+        div.innerHTML = `
+          <p class="text-xs text-gray-400 mb-1">${r.author}</p>
+          <p class="text-sm">${r.content.length > 150 ? r.content.slice(0,150)+'...' : r.content}</p>`;
+        reviewsContainer.appendChild(div);
+      });
 
       // RECOMMEND
       const recContainer = document.getElementById("recommend");
