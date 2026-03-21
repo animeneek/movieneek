@@ -16,20 +16,22 @@
   </div>
 
   <!-- HERO -->
-  <section class="min-h-screen flex flex-col justify-center px-6 md:px-20 space-y-4">
+  <section class="min-h-screen flex flex-col justify-center px-6 md:px-20 pt-20 md:pt-32 space-y-4">
     <div class="max-w-2xl">
       <h1 id="title" class="text-4xl md:text-6xl font-light"></h1>
       <p id="meta" class="text-sm text-gray-400"></p>
-      <p id="overview" class="text-gray-400"></p>
+      <p id="overview" class="text-gray-400 mt-2"></p>
       <p id="rating" class="text-gray-300 mt-2"></p>
     </div>
   </section>
 
   <!-- EMBED PLAYER -->
   <section class="px-6 md:px-20 pb-10">
-    <h2 class="text-sm text-gray-400 mb-4 text-center">Watch</h2>
+    <h2 class="text-sm text-gray-400 mb-2 text-center">Watch</h2>
     <div class="w-full max-w-4xl mx-auto bg-white/10 border border-white/30 rounded-lg overflow-hidden backdrop-blur-md shadow-lg">
-      <iframe id="playerFrame" class="w-full aspect-video md:aspect-[16/9] rounded-lg" frameborder="0" allowfullscreen></iframe>
+      <div class="relative w-full" style="padding-top:56.25%;">
+        <iframe id="playerFrame" class="absolute top-0 left-0 w-full h-full rounded-lg" frameborder="0" allowfullscreen></iframe>
+      </div>
     </div>
   </section>
 
@@ -146,7 +148,7 @@
         div.className = "bg-white/10 p-3 rounded-md";
         div.innerHTML = `
           <p class="text-xs text-gray-400 mb-1">${r.author}</p>
-          <p class="text-sm">${r.content.length > 120 ? r.content.slice(0,120)+'...' : r.content}</p>`;
+          <p class="text-sm">${r.content.length > 150 ? r.content.slice(0,150)+'...' : r.content}</p>`;
         reviewsContainer.appendChild(div);
       });
 
