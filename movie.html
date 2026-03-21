@@ -37,12 +37,21 @@
 
       <div class="relative w-full rounded-xl overflow-hidden border border-white/10 bg-black shadow-[0_0_120px_rgba(0,0,0,0.9)]">
         <div class="relative w-full aspect-video md:aspect-[16/9] lg:aspect-[21/9]">
-          <iframe id="playerFrame"
+          <!--<iframe id="playerFrame"
   allow="autoplay; fullscreen"
             class="absolute top-0 left-0 w-full h-full"
             frameborder="0"
             allowfullscreen>
-          </iframe>
+          </iframe>-->
+
+          <iframe id="playerFrame"
+  class="absolute top-0 left-0 w-full h-full"
+  frameborder="0"
+  allow="autoplay; fullscreen"
+  sandbox="allow-scripts allow-same-origin allow-presentation"
+  referrerpolicy="no-referrer"
+  allowfullscreen>
+</iframe>
         </div>
       </div>
 
