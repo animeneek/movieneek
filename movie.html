@@ -30,13 +30,13 @@
     <!-- softer label instead of loud "Watch" -->
     <h2 class="text-xs text-gray-500 mb-3 text-center tracking-widest uppercase">Now Playing</h2>
 
-    <div class="w-full max-w-5xl mx-auto rounded-xl overflow-hidden relative">
+    <div class="w-full max-w-[95vw] xl:max-w-[1400px] mx-auto rounded-xl overflow-hidden relative">
 
       <!-- cinema glow -->
       <div class="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black opacity-80 pointer-events-none"></div>
 
       <div class="relative w-full rounded-xl overflow-hidden border border-white/10 bg-black shadow-[0_0_120px_rgba(0,0,0,0.9)]">
-        <div class="relative w-full" style="padding-top:56.25%;">
+        <div class="relative w-full aspect-video md:aspect-[16/9] lg:aspect-[21/9]">
           <iframe id="playerFrame"
   allow="autoplay; fullscreen"
             class="absolute top-0 left-0 w-full h-full"
@@ -125,7 +125,7 @@
       // ✅ FIXED background (fallback if no backdrop)
       const bgImage = movie.backdrop_path
   ? IMG + movie.backdrop_path
-  : FALLBACK;
+  : (movie.poster_path ? POSTER + movie.poster_path : FALLBACK);
 
 const bgEl = document.getElementById("bg");
 bgEl.style.backgroundImage = `url(${bgImage})`;
@@ -133,7 +133,7 @@ bgEl.style.backgroundSize = "cover";
 bgEl.style.backgroundPosition = "center";
 bgEl.style.backgroundRepeat = "no-repeat";
 
-      document.getElementById("bg").style.backgroundImage = `url(${bgImage})`;
+      //document.getElementById("bg").style.backgroundImage = `url(${bgImage})`;
 
       document.getElementById("rating").textContent =
         `Rating: ${movie.vote_average} / 10 (${movie.vote_count} votes)`;
