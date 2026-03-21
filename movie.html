@@ -5,6 +5,87 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MovieNeek</title>
   <script src="https://cdn.tailwindcss.com"></script>
+
+<!--popupblocker-->
+  <script>
+(function() {
+  const originalOpen = window.open;
+
+  window.open = function(url, name, specs) {
+    // Allow only your domain
+    const allowedDomain = location.origin;
+
+    if (!url || url.startsWith(allowedDomain)) {
+      return originalOpen.apply(window, arguments);
+    }
+
+    console.log("Blocked popup:", url);
+    return null;
+  };
+})();
+</script>
+
+<script>
+(function() {
+  let lastUrl = location.href;
+
+  setInterval(() => {
+    if (location.href !== lastUrl) {
+      const allowedDomain = location.origin;
+
+      if (!location.href.startsWith(allowedDomain)) {
+        console.log("Blocked redirect:", location.href);
+        location.href = lastUrl;
+      } else {
+        lastUrl = location.href;
+      }
+    }
+  }, 500);
+})();
+</script>
+
+<div class="relative w-full h-full">
+  <iframe id="playerFrame"
+    class="absolute top-0 left-0 w-full h-full"
+    allow="autoplay; fullscreen"
+    frameborder="0"
+    allowfullscreen>
+  </iframe>
+
+  <div id="clickShield"
+       class="absolute inset-0 z-10 cursor-pointer"></div>
+</div>
+
+<script>
+const shield = document.getElementById("clickShield");
+const iframe = document.getElementById("playerFrame");
+
+shield.addEventListener("click", () => {
+  // Allow interaction temporarily
+  shield.style.display = "none";
+
+  setTimeout(() => {
+    shield.style.display = "block";
+  }, 3000); // re-block after 3s
+});
+</script>
+
+<script>
+document.addEventListener("click", function(e) {
+  let target = e.target.closest("a");
+
+  if (target && target.href) {
+    if (!target.href.startsWith(location.origin)) {
+      e.preventDefault();
+      console.log("Blocked external link:", target.href);
+    }
+  }
+}, true);
+</script>
+
+<!--popupbloker end-->
+
+  
 </head>
 
 <body class="bg-black text-white overflow-x-hidden">
@@ -37,21 +118,13 @@
 
       <div class="relative w-full rounded-xl overflow-hidden border border-white/10 bg-black shadow-[0_0_120px_rgba(0,0,0,0.9)]">
         <div class="relative w-full aspect-video md:aspect-[16/9] lg:aspect-[21/9]">
-          <!--<iframe id="playerFrame"
+          <iframe id="playerFrame"
   allow="autoplay; fullscreen"
             class="absolute top-0 left-0 w-full h-full"
             frameborder="0"
             allowfullscreen>
-          </iframe>-->
+          </iframe>
 
-          <iframe id="playerFrame"
-  class="absolute top-0 left-0 w-full h-full"
-  frameborder="0"
-  allow="autoplay; fullscreen"
-  sandbox="allow-scripts allow-same-origin allow-presentation"
-  referrerpolicy="no-referrer"
-  allowfullscreen>
-</iframe>
         </div>
       </div>
 
