@@ -16,28 +16,29 @@
   </div>
 
   <!-- HERO -->
-  <section class="min-h-screen flex flex-col justify-center px-6 md:px-20 pt-20 md:pt-32 space-y-4">
+  <section class="min-h-[70vh] flex flex-col justify-end px-6 md:px-20 pt-24 pb-10 space-y-3">
     <div class="max-w-2xl">
-      <h1 id="title" class="text-4xl md:text-6xl font-light"></h1>
+      <h1 id="title" class="text-4xl md:text-6xl font-light leading-tight max-w-xl"></h1>
       <p id="meta" class="text-sm text-gray-400"></p>
-      <p id="overview" class="text-gray-400 mt-2"></p>
+      <p id="overview" class="text-gray-400 mt-3 max-w-xl leading-relaxed"></p>
       <p id="rating" class="text-gray-300 mt-2"></p>
     </div>
   </section>
 
   <!-- EMBED PLAYER -->
-  <section class="px-6 md:px-20 pb-16">
+  <section class="px-6 md:px-20 pb-16 -mt-6">
     <!-- softer label instead of loud "Watch" -->
     <h2 class="text-xs text-gray-500 mb-3 text-center tracking-widest uppercase">Now Playing</h2>
 
     <div class="w-full max-w-5xl mx-auto rounded-xl overflow-hidden relative">
 
       <!-- cinema glow -->
-      <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-60 pointer-events-none"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black opacity-80 pointer-events-none"></div>
 
-      <div class="relative w-full border border-white/10 rounded-xl overflow-hidden shadow-[0_0_60px_rgba(255,255,255,0.08)]">
+      <div class="relative w-full rounded-xl overflow-hidden border border-white/10 bg-black shadow-[0_0_120px_rgba(0,0,0,0.9)]">
         <div class="relative w-full" style="padding-top:56.25%;">
           <iframe id="playerFrame"
+  allow="autoplay; fullscreen"
             class="absolute top-0 left-0 w-full h-full"
             frameborder="0"
             allowfullscreen>
@@ -83,7 +84,7 @@
     const POSTER = "https://image.tmdb.org/t/p/w500";
 
     // ✅ FIXED fallback (local path instead of broken GitHub blob)
-    const FALLBACK = "/assets/images/BG_01.jpg";
+    const FALLBACK = "/movieneek/assets/images/BG_01.jpg";
 
     const id = new URLSearchParams(window.location.search).get("id");
 
@@ -123,8 +124,14 @@
 
       // ✅ FIXED background (fallback if no backdrop)
       const bgImage = movie.backdrop_path
-        ? IMG + movie.backdrop_path
-        : FALLBACK;
+  ? IMG + movie.backdrop_path
+  : FALLBACK;
+
+const bgEl = document.getElementById("bg");
+bgEl.style.backgroundImage = `url(${bgImage})`;
+bgEl.style.backgroundSize = "cover";
+bgEl.style.backgroundPosition = "center";
+bgEl.style.backgroundRepeat = "no-repeat";
 
       document.getElementById("bg").style.backgroundImage = `url(${bgImage})`;
 
