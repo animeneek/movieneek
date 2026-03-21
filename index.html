@@ -140,7 +140,7 @@
       }
 
       const route = item.media_type === "tv" ? "series" : "movie";
-      document.getElementById("watchBtn").href = `/${route}.html?id=${item.id}`;
+      document.getElementById("watchBtn").href = `/movieneek/${route}.html?id=${item.id}`;
     }
 
     function startHeroRotation(genreMap) {
@@ -157,7 +157,7 @@
       const type = item.media_type === "tv" || item.first_air_date ? "series" : "movie";
 
       const link = document.createElement("a");
-      link.href = `/${type}.html?id=${item.id}`;
+      link.href = `/movieneek/${type}.html?id=${item.id}`;
       link.className = "min-w-[140px] snap-start";
 
       link.innerHTML = `
